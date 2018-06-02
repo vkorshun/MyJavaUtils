@@ -14,7 +14,9 @@ public class TestService {
     Timestamp curDate = new Timestamp(System.currentTimeMillis());
     KursLoaderUKR kl = new KursLoaderUKR(curDate, curDate);
     //WsdlKursLoaderCbRu kl = new WsdlKursLoaderCbRu(curDate, curDate, false);
-    kl.checkKurs();
+    //kl.checkKurs();
+    KursLoaderMB k2 = new KursLoaderMB(curDate, curDate, true);
+    k2.checkKurs();
     return "{\"Ok\":\"OK\"}";
   }
 }

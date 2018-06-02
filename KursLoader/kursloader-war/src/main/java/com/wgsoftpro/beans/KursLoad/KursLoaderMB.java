@@ -29,6 +29,36 @@ public class KursLoaderMB extends BaseKursLoader {
     }
   }
 
+  private boolean loadSaleKurs(Timestamp data, CurrencyVO cur) {
+    Timestamp calc_data = getKursData(data, 0);
+    SimpleDateFormat formatD = new SimpleDateFormat("dd-MM-yyyy");
+    String url = String.format("https://minfin.com.ua/currency/mb/archive/%s/%s/", cur.getS_name(), formatD.format(calc_data));
+    try {
+      String response = getHTML(url);
+      //String emptyKurs = "В выбранный вами период торги на Межбанке не проводились";
+
+      //int k = response.indexOf(emptyKurs);
+      KursVO kurs = getKursFromText(response, cur, null);
+      int nTry = 0;
+      while (kurs.getSumma() == null && nTry++<15) {
+        calc_data = getKursData(calc_data, 1);
+        //calc_data2 = getKursData(calc_data2, 1);
+        url = String.format("https://minfin.com.ua/currency/mb/archive/%s/%s/", cur.getS_name(), formatD.format(calc_data));
+        //url = "https://minfin.com.ua/currency/mb/archive/" + cur.getS_name() + "/" + formatD.format(calc_data2) + "/" + formatD.format(calc_data2);
+        response = getHTML(url);
+        kurs = getKursFromText(response, cur, null);
+        //k = response.indexOf(emptyKurs);
+      }
+      kurs.setData(data);
+      kursDAO.setKusVO(kurs);
+      return kurs.getSumma().compareTo(BigDecimal.ZERO) != 0;
+    } catch (Exception e) {
+      logger.error(e.getMessage());
+      errorList.add(e.getMessage());
+    }
+    return false;
+  }
+
   private boolean loadKursOnValuta(Timestamp data, CurrencyVO cur) {
     SimpleDateFormat formatD = new SimpleDateFormat("dd-MM-yyyy");
     Timestamp calc_data1 = getKursData(data, 2);
@@ -61,7 +91,8 @@ public class KursLoaderMB extends BaseKursLoader {
   @Override
   public boolean LoadKurs(Timestamp data) {
     for (CurrencyVO cur : currencyVOList) {
-      loadKursOnValuta(data, cur);
+      //loadKursOnValuta(data, cur);
+      loadSaleKurs(data, cur);
     }
     return true;
   }

@@ -12,6 +12,8 @@ public class KursLoadTimer {
     Timestamp curDate = new Timestamp(System.currentTimeMillis());
     KursLoaderUKR kursLoaderUKR = new KursLoaderUKR(curDate, curDate);
     kursLoaderUKR.checkKurs();
+    KursLoaderMB kursLoaderMB = new KursLoaderMB(curDate, curDate, true);
+    kursLoaderMB.checkKurs();
   }
 
   @Scheduled(cron="${cron.nbu.first}")
