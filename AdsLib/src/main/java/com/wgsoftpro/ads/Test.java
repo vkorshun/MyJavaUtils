@@ -1,5 +1,7 @@
 package com.wgsoftpro.ads;
 
+import com.wgsoftpro.ads.AdsConnection.AdsConnection;
+
 import java.io.IOException;
 import java.net.URISyntaxException;
 
@@ -13,7 +15,16 @@ public class Test {
     //Ace32Native.init();
     try {
       //AceWrapper wrapper = new AceWrapper();
-      System.out.println(AceWrapper.AdsGetVersion());
+      System.out.println(Ace32Wrapper.AdsGetVersion());
+      AdsConnection adsConn = new AdsConnection("D:/VKFIN/COMMON/INSALL","","");
+      adsConn.connect();
+      if (adsConn.isConnected()) {
+        System.out.println("connect");
+        adsConn.disconnect();
+        System.out.println("disconnect");
+      } else {
+        System.out.println("no connection");
+      }
     } finally {
       Ace32Native.destroy();
     }

@@ -2,7 +2,7 @@ package vkorshun;
 
 import com.wgsoftpro.ads.Ace32;
 import com.wgsoftpro.ads.Ace32Native;
-import com.wgsoftpro.ads.AceWrapper;
+import com.wgsoftpro.ads.Ace32Wrapper;
 import lombok.SneakyThrows;
 
 import java.io.File;
@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 
-public class Test {
+public class AdsLibTest {
 
   public static void main(String[] args) throws IOException, URISyntaxException {
     System.out.println(System.getProperty("java.io.tmpdir"));
@@ -27,7 +27,7 @@ public class Test {
     Ace32Native.init(System.getProperty("java.io.tmpdir")+"ace64");
     try {
       //AceWrapper wrapper = new AceWrapper();
-      System.out.println(AceWrapper.AdsGetVersion());
+      System.out.println(Ace32Wrapper.AdsGetVersion());
     } finally {
       Ace32Native.destroy();
     }
@@ -35,7 +35,7 @@ public class Test {
   }
 
   public static void loadJarDll(String name) throws IOException {
-    InputStream in = Test.class.getResourceAsStream(name);
+    InputStream in = AdsLibTest.class.getResourceAsStream(name);
     byte[] buffer = new byte[1024];
     int read = -1;
     File temp = File.createTempFile(name, "");

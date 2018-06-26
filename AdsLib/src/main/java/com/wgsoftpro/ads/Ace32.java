@@ -4,7 +4,6 @@ import lombok.SneakyThrows;
 
 import java.io.*;
 import java.net.URI;
-import java.net.URL;
 import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,8 +15,59 @@ public class Ace32 {
   public static final short ADS_MAX_ERROR_LEN = 600;
   public static final short MAX_DATA_LEN = 255;
 
+  public static final short ADS_LOCAL_SERVER = 0x0001;
+  public static final short ADS_REMOTE_SERVER = 0x0002;
+  public static final short ADS_AIS_SERVER = 0x0004;
+
+  public static final short ADS_CONNECTION = 1;
+  public static final short ADS_TABLE = 2;
+  public static final short ADS_INDEX_ORDER = 3;
+  public static final short ADS_STATEMENT = 4;
+  public static final short ADS_CURSOR = 5;
+  public static final short ADS_DATABASE_CONNECTION = 6;
+  public static final short ADS_SYS_ADMIN_CONNECTION = 7;
+  public static final short ADS_FTS_INDEX_ORDER = 8;
+
+  public static final short ADS_DEFAULT_SQL_TIMEOUT = 0x0000;
+  public static final short ADS_DEFAULT = 0;
+
+  //* options for connecting to Advantage servers - can be ORed together
+  public static final int ADS_INC_USERCOUNT = 0x00000001;
+  public static final int ADS_STORED_PROC_CONN = 0x00000002;
+  public static final int ADS_COMPRESS_ALWAYS = 0x00000004;
+  public static final int ADS_COMPRESS_NEVER = 0x00000008;
+  public static final int ADS_COMPRESS_INTERNET = 0x0000000C;
+  public static final int ADS_REPLICATION_CONNECTION = 0x00000010;
+  public static final int ADS_UDP_IP_CONNECTION = 0x00000020;
+  public static final int ADS_IPX_CONNECTION = 0x00000040;
+  public static final int ADS_TCP_IP_CONNECTION = 0x00000080;
+  public static final int ADS_TCP_IP_V6_CONNECTION = 0x00000100;
+  public static final int ADS_NOTIFICATION_CONNECTION = 0x00000200;
+  // Reserved                         0x00000400
+  // Reserved                         0x00000800
+  public static final int ADS_TLS_CONNECTION = 0x00001000;
+  public static final int ADS_CHECK_FREE_TABLE_ACCESS = 0x00002000;
+
+  // options for opening/create tables - can be ORed together
+  public static final int ADS_EXCLUSIVE = 0x00000001;
+  public static final int ADS_READONLY = 0x00000002;
+  public static final int ADS_SHARED = 0x00000004;
+  public static final int ADS_CLIPPER_MEMOS = 0x00000008;
+  public static final int ADS_TABLE_PERM_READ = 0x00000010;
+  public static final int ADS_TABLE_PERM_UPDATE = 0x00000020;
+  public static final int ADS_TABLE_PERM_INSERT = 0x00000040;
+  public static final int ADS_TABLE_PERM_DELETE = 0x00000080;
+  public static final int ADS_REINDEX_ON_COLLATION_MISMATCH = 0x00000100;
+  public static final int ADS_IGNORE_COLLATION_MISMATCH = 0x00000200;
+  public static final int ADS_FREE_TABLE = 0x00001000; // Mutually exclusive with ADS_DICTIONARY_BOUND_TABLE
+  public static final int ADS_TEMP_TABLE = 0x00002000; // Mutually exclusive with ADS_DICTIONARY_BOUND_TABLE
+  public static final int ADS_DICTIONARY_BOUND_TABLE = 0x00004000; // Mutually exclusive with ADS_FREE_TABLE or ADS_TEMP_TABLE
+  public static final int ADS_CACHE_READS = 0x20000000; // Enable caching of reads on the table
+  public static final int ADS_CACHE_WRITES = 0x40000000; // Enable caching of reads & writes on the table
+
+
   private Ace32Native ace32;
-  private AceWrapper wrapper;
+  private Ace32Wrapper wrapper;
 
   public Ace32() {
     prepareLib();

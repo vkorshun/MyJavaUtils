@@ -23,4 +23,19 @@ public class Ace32Native {
   public static native int AdsGetLastError(IntByReference pulErrCode,
                                            byte[] pucBuf,
                                            ShortByReference pusBufLen);
+
+  public static native int AdsConnect60(
+      byte[] pucServerPath,//: PAceChar;
+      short usServerTypes, //: UNSIGNED16;
+      byte[] pucUserName, //: PAceChar;
+      byte[] pucPassword, //: PAceChar;
+      int ulOptions, //: UNSIGNED32;
+      IntByReference phConnect); //: pADSHANDLE );
+
+  public static native int AdsSetSQLTimeout( int hObj, //: ADSHANDLE,
+      int ulTimeout //: UNSIGNED32 ):UNSIGNED32; {$IFDEF WIN32}stdcall;{$ENDIF}{$IFDEF LINUX}cdecl;{$ENDIF}
+  );
+
+  public static native int AdsDisconnect(int hConnect//: ADSHANDLE )
+  );
 }
