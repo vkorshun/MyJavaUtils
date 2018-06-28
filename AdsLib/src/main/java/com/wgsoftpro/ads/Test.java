@@ -19,7 +19,7 @@ public class Test {
       AdsConnection adsConn = new AdsConnection("D:/VKFIN/COMMON/INSALL","","");
       adsConn.connect();
       if (adsConn.isConnected()) {
-        System.out.println("connect");
+        System.out.println("connect"+adsConn.AdsGetConnectionPath());
         adsConn.disconnect();
         System.out.println("disconnect");
       } else {

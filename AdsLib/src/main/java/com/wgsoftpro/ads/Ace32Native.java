@@ -38,4 +38,39 @@ public class Ace32Native {
 
   public static native int AdsDisconnect(int hConnect//: ADSHANDLE )
   );
+
+  public static native int AdsGetConnectionPath(int hConnect//: ADSHANDLE;
+      , byte[] pucConnectionPath //: PAceChar;
+      , ShortByReference pusLen //: PUNSIGNED16 ):UNSIGNED32;
+  );
+
+  public static native int AdsGetConnectionType( int hConnect//: ADSHANDLE;
+      ,ShortByReference pusConnectType //: PUNSIGNED16 ):UNSIGNED32;
+  );
+
+  public static native int AdsCacheOpenTables(short count);
+  public static native int AdsCacheOpenCursors(short count);
+
+  public static native int AdsCloseCachedTables( int hConnection );
+
+  public static native int AdsCreateSQLStatement(int  hConnect //: ADSHANDLE;
+      ,IntByReference phStatement //: pADSHANDLE //):UNSIGNED32; {$IFDEF WIN32}stdcall;{$ENDIF}{$IFDEF LINUX}cdecl;{$ENDIF}
+  );
+
+  public static native int AdsStmtSetTableLockType(int hStatement//: ADSHANDLE;
+      ,short usLockType//: UNSIGNED16 ):UNSIGNED32; {$IFDEF WIN32}stdcall;{$ENDIF}{$IFDEF LINUX}cdecl;{$ENDIF}
+  );
+
+  public static native int AdsStmtSetTableCharType(int hStatement //: ADSHANDLE;
+      ,short usCharType //: UNSIGNED16 ):UNSIGNED32; {$IFDEF WIN32}stdcall;{$ENDIF}{$IFDEF LINUX}cdecl;{$ENDIF}
+  );
+
+  public static native int AdsStmtSetTableType(int hStatement//: ADSHANDLE;
+      ,short usTableType //: UNSIGNED16 ):UNSIGNED32; {$IFDEF WIN32}stdcall;{$ENDIF}{$IFDEF LINUX}cdecl;{$ENDIF}
+  );
+
+  public static native int AdsStmtSetTablePassword(int hStatement//: ADSHANDLE;
+      ,byte[] pucTableName//: PAceChar;
+      ,byte[] pucPassword //: PAceChar ):UNSIGNED32; {$IFDEF WIN32}stdcall;{$ENDIF}{$IFDEF LINUX}cdecl;{$ENDIF}
+  );
 }

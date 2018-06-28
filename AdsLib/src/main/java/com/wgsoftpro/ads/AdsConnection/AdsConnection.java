@@ -16,9 +16,10 @@ public class AdsConnection {
   private int options;
   private int sqlTimeout = ADS_DEFAULT_SQL_TIMEOUT;
 
-  private int handle;
+  private Integer handle;
 
   public AdsConnection(String path, String userName, String password, short serverTypes, int options) {
+    handle = -1;
     this.path = path;
     this.userName = userName;
     this.password = password;
@@ -27,6 +28,7 @@ public class AdsConnection {
   }
 
   public AdsConnection(String path, String userName, String password) {
+    handle = -1;
     this.path = path;
     this.userName = userName;
     this.password = password;
@@ -47,7 +49,10 @@ public class AdsConnection {
   }
 
   public void disconnect() {
-
+    if (handle  != null) {
+      Ace32Wrapper.AdsDisconnect(handle);
+    }
+    handle = null;
   }
 
   public static short getDefaultServerTypes() {
@@ -77,4 +82,30 @@ public class AdsConnection {
     return retval;
   }
 
+  public String AdsGetConnectionPath() {
+    if (handle != null ) {
+      return Ace32Wrapper.AdsGetConnectionPath(handle);
+    } else {
+      return "";
+    }
+  }
+
+  public short AdsGetConnectionType(){
+    if (handle != null ) {
+      return Ace32Wrapper.AdsGetConnectionType(handle);
+    } else {
+      return -1;
+    }
+  }
+
+  public void closeCachedTables() {
+    if (handle != null) {
+      Ace32Wrapper.AdsCloseCachedTables(handle);
+    }
+  }
+
+  public void setDefaultSettings() {
+    Ace32Wrapper.AdsCacheOpenTables((short)0);
+    Ace32Wrapper.AdsCacheOpenCursors((short)25);
+  }
 }

@@ -14,6 +14,7 @@ import java.util.List;
 public class Ace32 {
   public static final short ADS_MAX_ERROR_LEN = 600;
   public static final short MAX_DATA_LEN = 255;
+  public static final short ADS_MAX_PATH = 260;
 
   public static final short ADS_LOCAL_SERVER = 0x0001;
   public static final short ADS_REMOTE_SERVER = 0x0002;
@@ -65,6 +66,20 @@ public class Ace32 {
   public static final int ADS_CACHE_READS = 0x20000000; // Enable caching of reads on the table
   public static final int ADS_CACHE_WRITES = 0x40000000; // Enable caching of reads & writes on the table
 
+  //{* locking compatibility *}
+  public static final short ADS_COMPATIBLE_LOCKING = 0;
+  public static final short ADS_PROPRIETARY_LOCKING = 1;
+
+  //{* Supported file types *}
+  public static final short ADS_DATABASE_TABLE = ADS_DEFAULT;
+  public static final short ADS_NTX = 1;
+  public static final short ADS_CDX = 2;
+  public static final short ADS_ADT = 3;
+  public static final short ADS_VFP = 4;
+
+  //{* character set types *}
+  public static final short ADS_ANSI = 1;
+  public static final short ADS_OEM = 2;
 
   private Ace32Native ace32;
   private Ace32Wrapper wrapper;
