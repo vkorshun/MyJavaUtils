@@ -1,4 +1,4 @@
-package com.wgsoftpro.ads.AdsConnection;
+package com.wgsoftpro.ads.AdsClasses;
 
 public enum AdsLinkOptions {
   loGlobal,

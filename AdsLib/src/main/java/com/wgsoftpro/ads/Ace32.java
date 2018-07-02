@@ -66,20 +66,81 @@ public class Ace32 {
   public static final int ADS_CACHE_READS = 0x20000000; // Enable caching of reads on the table
   public static final int ADS_CACHE_WRITES = 0x40000000; // Enable caching of reads & writes on the table
 
-  //{* locking compatibility *}
+  /* locking compatibility */
   public static final short ADS_COMPATIBLE_LOCKING = 0;
   public static final short ADS_PROPRIETARY_LOCKING = 1;
 
-  //{* Supported file types *}
+  /* Supported file types */
   public static final short ADS_DATABASE_TABLE = ADS_DEFAULT;
   public static final short ADS_NTX = 1;
   public static final short ADS_CDX = 2;
   public static final short ADS_ADT = 3;
   public static final short ADS_VFP = 4;
 
-  //{* character set types *}
+  /* character set types */
   public static final short ADS_ANSI = 1;
   public static final short ADS_OEM = 2;
+
+  /* Logical constants */
+  public static final short ADS_FALSE = 0;
+  public static final short ADS_TRUE = 1;
+  public static final int MSEC_PER_DAY = 24*60*60*1000;
+
+  /* data types */
+  public static final short ADS_TYPE_UNKNOWN = 0;
+  public static final short ADS_LOGICAL = 1; ///* 1 byte logical value */
+  public static final short ADS_NUMERIC = 2; ///* DBF character style numeric */
+  /* Date field.  With ADS_NTX, ADS_CDX, and
+       * ADS_VFP< this is an 8 byte field of the form
+      * CCYYMMDD.  With ADS_ADT, it is a 4 byte
+       * Julian date. */
+  public static final short ADS_DATE = 3;
+  public static final short ADS_STRING = 4;// /* Character data */
+  public static final short ADS_MEMO = 5;// /* Variable length character data */
+
+  /* the following are extended data types */
+  public static final short ADS_BINARY = 6; /* BLOB - any data */
+  public static final short ADS_IMAGE = 7; /* BLOB - bitmap */
+  public static final short ADS_VARCHAR = 8; /* variable length character field */
+  public static final short ADS_COMPACTDATE = 9; /* DBF date represented with 3 bytes */
+  public static final short ADS_DOUBLE = 10; /* IEEE 8 byte floating point */
+  public static final short ADS_INTEGER = 11; /* IEEE 4 byte signed long integer */
+
+  /* the following are supported with the ADT format */
+  public static final short ADS_SHORTINT = 12; /* IEEE 2 byte signed short integer */
+  /* 4 byte long integer representing
+      * milliseconds since midnight */
+  public static final short ADS_TIME = 13;
+  /* 8 bytes.  High order 4 bytes are a
+      * long integer representing Julian date.
+      * Low order 4 bytes are a long integer
+       * representing milliseconds since
+      * midnight */
+  public static final short ADS_TIMESTAMP = 14;
+  public static final short ADS_AUTOINC = 15; /* 4 byte auto-increment value */
+  public static final short ADS_RAW = 16; /* Untranslated data */
+  public static final short ADS_CURDOUBLE = 17; /* IEEE 8 byte floating point currency */
+  public static final short ADS_MONEY = 18; /* 8 byte, 4 implied decimal Currency Field */
+  public static final short ADS_LONGLONG = 19; /* 8 byte integer */
+  public static final short ADS_CISTRING = 20; /* CaSe INSensiTIVE character data */
+  public static final short ADS_ROWVERSION = 21; /* 8 byte integer, incremented for every update, unique to entire table */
+  public static final short ADS_MODTIME = 22; /* 8 byte timestamp, updated when record is updated */
+  public static final short ADS_VARCHAR_FOX = 23; /* Visual FoxPro varchar field */
+  public static final short ADS_VARBINARY_FOX = 24; /* Visual FoxPro varbinary field */
+  public static final short ADS_SYSTEM_FIELD = 25; /* For internal usage */
+  public static final short ADS_NCHAR = 26; /* Unicode Character data */
+  public static final short ADS_NVARCHAR = 27; /* Unpadded Unicode Character data */
+  public static final short ADS_NMEMO = 28; /* Variable Length Unicode Data */
+
+  /* Options for returning string values */
+  public static final short ADS_NONE = 0x0000;
+  public static final short ADS_LTRIM = 0x0001;
+  public static final short ADS_RTRIM = 0x0002;
+  public static final short ADS_TRIM = 0x0003;
+  public static final short ADS_GET_UTF8 = 0x0004;
+  public static final short ADS_DONT_CHECK_CONV_ERR = 0x0008;
+  public static final short ADS_GET_FORMAT_ANSI = 0x0010;
+  public static final short ADS_GET_FORMAT_WEB = 0x0030;
 
   private Ace32Native ace32;
   private Ace32Wrapper wrapper;

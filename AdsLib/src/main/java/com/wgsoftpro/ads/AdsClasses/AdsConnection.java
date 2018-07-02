@@ -1,25 +1,28 @@
-package com.wgsoftpro.ads.AdsConnection;
+package com.wgsoftpro.ads.AdsClasses;
 
+import com.sun.jna.NativeLong;
 import com.wgsoftpro.ads.Ace32;
 import com.wgsoftpro.ads.Ace32Wrapper;
 import lombok.Getter;
 
+import java.io.Closeable;
+import java.io.IOException;
+
 import static com.wgsoftpro.ads.Ace32.*;
 
 @Getter
-public class AdsConnection {
+public class AdsConnection implements Closeable {
   private String path;
   private String userName;
   private String password;
-  private boolean isConnected;
   private short serverTypes;
   private int options;
   private int sqlTimeout = ADS_DEFAULT_SQL_TIMEOUT;
 
-  private Integer handle;
+  private NativeLong handle;
 
   public AdsConnection(String path, String userName, String password, short serverTypes, int options) {
-    handle = -1;
+    handle = null;
     this.path = path;
     this.userName = userName;
     this.password = password;
@@ -28,7 +31,7 @@ public class AdsConnection {
   }
 
   public AdsConnection(String path, String userName, String password) {
-    handle = -1;
+    handle = null;
     this.path = path;
     this.userName = userName;
     this.password = password;
@@ -38,13 +41,12 @@ public class AdsConnection {
 
 
   public void connect() {
-    if (isConnected) {
+    if (handle != null) {
       throw new RuntimeException("New connections is imposible without close previous");
     }
     handle = Ace32Wrapper.AdsConnect60(path, serverTypes, userName, password, options);
-    isConnected = true;
     if (sqlTimeout != ADS_DEFAULT_SQL_TIMEOUT) {
-      Ace32Wrapper.AdsSetSQLTimeout(handle, sqlTimeout);
+      Ace32Wrapper.AdsSetSQLTimeout(handle, new NativeLong(sqlTimeout));
     }
   }
 
@@ -107,5 +109,14 @@ public class AdsConnection {
   public void setDefaultSettings() {
     Ace32Wrapper.AdsCacheOpenTables((short)0);
     Ace32Wrapper.AdsCacheOpenCursors((short)25);
+  }
+
+  @Override
+  public void close() throws IOException {
+    disconnect();
+  }
+
+  public boolean isConnected() {
+    return handle != null;
   }
 }

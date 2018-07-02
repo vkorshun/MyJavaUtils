@@ -1,4 +1,4 @@
-package com.wgsoftpro.ads.AdsConnection;
+package com.wgsoftpro.ads.AdsClasses;
 
 public class AdsConnectionError extends Throwable {
   public AdsConnectionError(String message) {
