@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.io.UnsupportedEncodingException;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 
@@ -431,12 +432,17 @@ public class Ace32Wrapper {
     return new Short(retval.getValue());
   }
 
-  public static String AdsGetDate(NativeLong hTable, String fldName) {
+  public static Timestamp AdsGetDate(NativeLong hTable, String fldName) {
     byte[] pucFldName = getAnsiBytes(fldName);
     byte[] pucBuf = new byte[11];
     ShortByReference retsize = new ShortByReference((short) 11);
     checkError(Ace32Native.AdsGetDate(hTable, pucFldName, pucBuf, retsize));
-    return Native.toString(pucBuf, defaultAnsiCharSet).substring(0, retsize.getValue());
+    String _d = Native.toString(pucBuf, defaultAnsiCharSet).substring(0, retsize.getValue());
+    try {
+      return new Timestamp(simpleDateFormat.parse(_d).getTime());
+    } catch (ParseException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   public static void AdsGotoBottom(NativeLong hObj) {

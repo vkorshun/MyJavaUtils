@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Map;
 
 //@Slf4j
 @Getter()
@@ -28,6 +30,8 @@ public class AdsStatement implements Closeable {
   @Setter(AccessLevel.NONE)
   protected NativeLong hCursor;
   protected AdsFieldsInfo adsFieldsInfo;
+  @Setter(AccessLevel.NONE)
+  protected Map<String,String> passwords;
 
 
   public AdsStatement(AdsConnection adsConnection) {
@@ -39,6 +43,7 @@ public class AdsStatement implements Closeable {
     hStatement = null;
     hCursor = null;
     adsFieldsInfo = null;
+    passwords = new HashMap<>();
   }
 
   protected void createStatement() {
@@ -46,13 +51,16 @@ public class AdsStatement implements Closeable {
     Ace32Wrapper.AdsStmtSetTableType(hStatement, adsTableType.getCode());
     Ace32Wrapper.AdsStmtSetTableCharType(hStatement, adsCharType.getCode());
     Ace32Wrapper.AdsStmtSetTableLockType(hStatement, adsLockType.getCode());
+    for (String key: passwords.keySet()) {
+      Ace32Wrapper.AdsStmtSetTablePassword(hStatement, key, passwords.get(key));
+    }
+
   }
 
-  public void setPassword(String tableName, String password) {
-    if (hStatement != null) {
-      Ace32Wrapper.AdsStmtSetTablePassword(hStatement, tableName, password);
-    }
-  }
+//  public void setPassword(String tableName, String password) {
+//    if (hStatement != null) {
+//    }
+//  }
 
   protected void closeStatement() {
     try {
@@ -106,73 +114,73 @@ public class AdsStatement implements Closeable {
 
   public AdsFieldValue getFieldValue(String fieldName) {
     Object retval = null;
-    if (isEmpty()) {
-      return null;
-    }
-    AdsFieldDescription adsFieldDescription = adsFieldsInfo.getAdsFieldDescription(fieldName);
-    if (adsFieldDescription.getType() == Ace32.ADS_NUMERIC) {
-      if (adsFieldDescription.getLength() > 9 && adsFieldDescription.getDecimals() > 0) {
-        retval = Ace32Wrapper.AdsGetDouble(hCursor, fieldName);
-      } else {
-        retval = Ace32Wrapper.AdsGetLongLong(hCursor, fieldName);
-      }
-    } else {
-      switch (adsFieldDescription.getType()) {
-        case Ace32.ADS_DOUBLE:
-        case Ace32.ADS_CURDOUBLE: {
+    if (!isEmpty()) {
+      AdsFieldDescription adsFieldDescription = adsFieldsInfo.getAdsFieldDescription(fieldName);
+      if (adsFieldDescription.getType() == Ace32.ADS_NUMERIC) {
+        if (adsFieldDescription.getLength() > 9 && adsFieldDescription.getDecimals() > 0) {
           retval = Ace32Wrapper.AdsGetDouble(hCursor, fieldName);
-          break;
-        }
-        case Ace32.ADS_INTEGER:
-        case Ace32.ADS_SHORTINT:
-        case Ace32.ADS_ROWVERSION:
-        case Ace32.ADS_LONGLONG:
-        case Ace32.ADS_AUTOINC: {
+        } else {
           retval = Ace32Wrapper.AdsGetLongLong(hCursor, fieldName);
-          break;
         }
-        case Ace32.ADS_MONEY: {
-          retval = Ace32Wrapper.AdsGetMoney(hCursor, fieldName);
-          break;
-        }
-        case Ace32.ADS_MEMO: {
-          adsFieldDescription.setLength(Ace32Wrapper.AdsGetMemoLength(hCursor, fieldName));
-          retval = Ace32Wrapper.AdsGetString(hCursor, fieldName, adsFieldDescription.getLength());
-          break;
-        }
-        case Ace32.ADS_NMEMO: {
-          adsFieldDescription.setLength(Ace32Wrapper.AdsGetMemoLength(hCursor, fieldName));
-          retval = Ace32Wrapper.AdsGetStringW(hCursor, fieldName, adsFieldDescription.getLength());
-          break;
-        }
-        case Ace32.ADS_NCHAR:
-        case Ace32.ADS_NVARCHAR: {
-          retval = Ace32Wrapper.AdsGetStringW(hCursor, fieldName, adsFieldDescription.getLength());
-          break;
-        }
-        case Ace32.ADS_STRING:
-        case Ace32.ADS_VARCHAR_FOX:
-        case Ace32.ADS_CISTRING: {
-          retval = Ace32Wrapper.AdsGetString(hCursor, fieldName, adsFieldDescription.getLength());
-          break;
-        }
-        case Ace32.ADS_DATE: {
-          retval = Ace32Wrapper.AdsGetDate(hCursor, fieldName);
-        }
-        case Ace32.ADS_LOGICAL: {
-          retval = Ace32Wrapper.AdsGetLogical(hCursor, fieldName);
-          break;
-        }
-        case Ace32.ADS_TIME:
-        case Ace32.ADS_MODTIME:
-        case Ace32.ADS_TIMESTAMP: {
-          retval = new Timestamp(Ace32Wrapper.AdsGetMilliseconds(hCursor, fieldName));
-          break;
-        }
-        case Ace32.ADS_BINARY:
-        case Ace32.ADS_VARBINARY_FOX:
-        case Ace32.ADS_IMAGE: {
-          retval = adsFieldDescription.getLength() > 0 ? "BLOB" : "blob";
+      } else {
+        switch (adsFieldDescription.getType()) {
+          case Ace32.ADS_DOUBLE:
+          case Ace32.ADS_CURDOUBLE: {
+            retval = Ace32Wrapper.AdsGetDouble(hCursor, fieldName);
+            break;
+          }
+          case Ace32.ADS_INTEGER:
+          case Ace32.ADS_SHORTINT:
+          case Ace32.ADS_ROWVERSION:
+          case Ace32.ADS_LONGLONG:
+          case Ace32.ADS_AUTOINC: {
+            retval = Ace32Wrapper.AdsGetLongLong(hCursor, fieldName);
+            break;
+          }
+          case Ace32.ADS_MONEY: {
+            retval = Ace32Wrapper.AdsGetMoney(hCursor, fieldName);
+            break;
+          }
+          case Ace32.ADS_MEMO: {
+            adsFieldDescription.setLength(Ace32Wrapper.AdsGetMemoLength(hCursor, fieldName));
+            retval = Ace32Wrapper.AdsGetString(hCursor, fieldName, adsFieldDescription.getLength());
+            break;
+          }
+          case Ace32.ADS_NMEMO: {
+            adsFieldDescription.setLength(Ace32Wrapper.AdsGetMemoLength(hCursor, fieldName));
+            retval = Ace32Wrapper.AdsGetStringW(hCursor, fieldName, adsFieldDescription.getLength());
+            break;
+          }
+          case Ace32.ADS_NCHAR:
+          case Ace32.ADS_NVARCHAR: {
+            retval = Ace32Wrapper.AdsGetStringW(hCursor, fieldName, adsFieldDescription.getLength());
+            break;
+          }
+          case Ace32.ADS_STRING:
+          case Ace32.ADS_VARCHAR_FOX:
+          case Ace32.ADS_CISTRING: {
+            retval = Ace32Wrapper.AdsGetString(hCursor, fieldName, adsFieldDescription.getLength());
+            break;
+          }
+          case Ace32.ADS_DATE: {
+            retval = Ace32Wrapper.AdsGetDate(hCursor, fieldName);
+            break;
+          }
+          case Ace32.ADS_LOGICAL: {
+            retval = Ace32Wrapper.AdsGetLogical(hCursor, fieldName);
+            break;
+          }
+          case Ace32.ADS_TIME:
+          case Ace32.ADS_MODTIME:
+          case Ace32.ADS_TIMESTAMP: {
+            retval = new Timestamp(Ace32Wrapper.AdsGetMilliseconds(hCursor, fieldName));
+            break;
+          }
+          case Ace32.ADS_BINARY:
+          case Ace32.ADS_VARBINARY_FOX:
+          case Ace32.ADS_IMAGE: {
+            retval = adsFieldDescription.getLength() > 0 ? "BLOB" : "blob";
+          }
         }
       }
     }
@@ -202,5 +210,9 @@ public class AdsStatement implements Closeable {
   }
   public void previous(){
     Ace32Wrapper.AdsSkip(hCursor, -1);
+  }
+
+  public void setPassword(String tablename, String password){
+    passwords.put(tablename, password);
   }
 }

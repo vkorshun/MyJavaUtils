@@ -48,6 +48,7 @@ public class AdsConnection implements Closeable {
     if (sqlTimeout != ADS_DEFAULT_SQL_TIMEOUT) {
       Ace32Wrapper.AdsSetSQLTimeout(handle, new NativeLong(sqlTimeout));
     }
+    Ace32Wrapper.AdsSetDateFormat60(handle,"dd.mm.yyyy");
   }
 
   public void disconnect() {
