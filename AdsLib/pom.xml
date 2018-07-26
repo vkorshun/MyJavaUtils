@@ -7,7 +7,7 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
     <groupId>com.wgsoftpro</groupId>
-    <version>1.0</version>
+    <version>0.0.1-SNAPSHOT</version>
     <artifactId>com.wgsoftpro.adslib</artifactId>
     <name>adslib</name>
 
@@ -67,6 +67,18 @@
         </plugins>
     </build>
 
+    <distributionManagement>
+        <repository>
+            <id>maven-releases</id>
+            <url>http://globalsrv1.globino.ua:8081/repository/maven-releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>maven-snapshots</id>
+            <name>Sp Repository</name>
+            <url>http://globalsrv1.globino.ua:8081/repository/maven-snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
+
     <dependencies>
         <!-- https://mvnrepository.com/artifact/net.java.dev.jna/jna -->
         <dependency>
@@ -89,5 +101,14 @@
         </dependency>
     </dependencies>
 
-
+    <repositories>
+        <repository>
+            <id>maven-releases</id>
+            <url>http://globalsrv1.globino.ua:8081/repository/maven-releases/</url>
+        </repository>
+        <repository>
+            <id>maven-snapshot</id>
+            <url>http://globalsrv1.globino.ua:8081/repository/maven-snapshots/</url>
+        </repository>
+    </repositories>
 </project>

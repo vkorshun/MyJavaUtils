@@ -1,6 +1,5 @@
 package com.wgsoftpro.ads.AdsClasses;
 
-import com.sun.deploy.util.StringUtils;
 import com.wgsoftpro.ads.Ace32Wrapper;
 
 import java.util.*;
@@ -22,14 +21,14 @@ public class AdsQuery extends AdsStatement {
     }
     createStatement();
     if (params.isEmpty()) {
-      hCursor = Ace32Wrapper.AdsExecuteSQLDirect(hStatement, query);
+      hCursor = ace32Wrapper.AdsExecuteSQLDirect(hStatement, query);
     } else {
-      Ace32Wrapper.AdsPrepareSQL(hStatement, query);
+      ace32Wrapper.AdsPrepareSQL(hStatement, query);
       setParams();
-      hCursor = Ace32Wrapper.AdsExecuteSQL(hStatement);
+      hCursor = ace32Wrapper.AdsExecuteSQL(hStatement);
     }
     if (hCursor != null) {
-      adsFieldsInfo = new AdsFieldsInfo(hCursor);
+      adsFieldsInfo = new AdsFieldsInfo(ace32Wrapper, hCursor);
     }
   }
 

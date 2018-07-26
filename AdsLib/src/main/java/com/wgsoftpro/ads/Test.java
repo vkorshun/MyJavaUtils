@@ -2,7 +2,6 @@ package com.wgsoftpro.ads;
 
 import com.wgsoftpro.ads.AdsClasses.AdsConnection;
 import com.wgsoftpro.ads.AdsClasses.AdsQuery;
-import com.wgsoftpro.ads.Utils.*;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -11,7 +10,7 @@ import java.sql.Timestamp;
 
 public class Test {
   public static void main(String[] args) throws IOException, URISyntaxException {
-    System.out.println(System.getProperty("java.io.tmpdir"));
+/*    System.out.println(System.getProperty("java.io.tmpdir"));
     System.out.println(System.getProperty("os.name"));
     testMix();
 
@@ -55,12 +54,12 @@ public class Test {
       }
     } finally {
       Ace32Native.destroy();
-    }
+    }*/
   }
 
   public static void testMix() throws UnsupportedEncodingException {
-    System.out.println(Crypto.spCrypt("123456","123","Вася"));
-    System.out.println(StringUtils.charMix("123","4567"));
+    //System.out.println(Crypto.spCrypt("123456","123","Вася"));
+    //System.out.println(StringUtils.charMix("123","4567"));
   }
 
 

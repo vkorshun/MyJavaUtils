@@ -20,8 +20,10 @@ public class AdsConnection implements Closeable {
   private int sqlTimeout = ADS_DEFAULT_SQL_TIMEOUT;
 
   private NativeLong handle;
+  private Ace32Wrapper ace32Wrapper;
 
   public AdsConnection(String path, String userName, String password, short serverTypes, int options) {
+    ace32Wrapper = new Ace32Wrapper();
     handle = null;
     this.path = path;
     this.userName = userName;
@@ -31,6 +33,7 @@ public class AdsConnection implements Closeable {
   }
 
   public AdsConnection(String path, String userName, String password) {
+    ace32Wrapper = new Ace32Wrapper();
     handle = null;
     this.path = path;
     this.userName = userName;
@@ -44,16 +47,16 @@ public class AdsConnection implements Closeable {
     if (handle != null) {
       throw new RuntimeException("New connections is imposible without close previous");
     }
-    handle = Ace32Wrapper.AdsConnect60(path, serverTypes, userName, password, options);
+    handle = ace32Wrapper.AdsConnect60(path, serverTypes, userName, password, options);
     if (sqlTimeout != ADS_DEFAULT_SQL_TIMEOUT) {
-      Ace32Wrapper.AdsSetSQLTimeout(handle, new NativeLong(sqlTimeout));
+      ace32Wrapper.AdsSetSQLTimeout(handle, new NativeLong(sqlTimeout));
     }
-    Ace32Wrapper.AdsSetDateFormat60(handle,"dd.mm.yyyy");
+    ace32Wrapper.AdsSetDateFormat60(handle,"dd.mm.yyyy");
   }
 
   public void disconnect() {
     if (handle  != null) {
-      Ace32Wrapper.AdsDisconnect(handle);
+      ace32Wrapper.AdsDisconnect(handle);
     }
     handle = null;
   }
@@ -87,7 +90,7 @@ public class AdsConnection implements Closeable {
 
   public String AdsGetConnectionPath() {
     if (handle != null ) {
-      return Ace32Wrapper.AdsGetConnectionPath(handle);
+      return ace32Wrapper.AdsGetConnectionPath(handle);
     } else {
       return "";
     }
@@ -95,7 +98,7 @@ public class AdsConnection implements Closeable {
 
   public short AdsGetConnectionType(){
     if (handle != null ) {
-      return Ace32Wrapper.AdsGetConnectionType(handle);
+      return ace32Wrapper.AdsGetConnectionType(handle);
     } else {
       return -1;
     }
@@ -103,13 +106,13 @@ public class AdsConnection implements Closeable {
 
   public void closeCachedTables() {
     if (handle != null) {
-      Ace32Wrapper.AdsCloseCachedTables(handle);
+      ace32Wrapper.AdsCloseCachedTables(handle);
     }
   }
 
   public void setDefaultSettings() {
-    Ace32Wrapper.AdsCacheOpenTables((short)0);
-    Ace32Wrapper.AdsCacheOpenCursors((short)25);
+    ace32Wrapper.AdsCacheOpenTables((short)0);
+    ace32Wrapper.AdsCacheOpenCursors((short)25);
   }
 
   @Override

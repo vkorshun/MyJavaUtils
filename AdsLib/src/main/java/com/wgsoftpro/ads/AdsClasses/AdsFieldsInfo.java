@@ -15,17 +15,19 @@ import java.util.stream.Collectors;
 public class AdsFieldsInfo {
   private NativeLong handle;
   private List<AdsFieldDescription> fieldList;
+  private Ace32Wrapper ace32Wrapper;
 
-  public AdsFieldsInfo(NativeLong handle) {
+  public AdsFieldsInfo(Ace32Wrapper ace32Wrapper, NativeLong handle ) {
+    this.ace32Wrapper = ace32Wrapper;
     this.handle = handle;
     fieldList = new ArrayList<>();
-    int nFieldsCount = Ace32Wrapper.AdsGetNumFields(handle);
+    int nFieldsCount = ace32Wrapper.AdsGetNumFields(handle);
     for (short i=1;i<=nFieldsCount;i++) {
       AdsFieldDescription adsFieldDescription = new AdsFieldDescription();
-      adsFieldDescription.setName(Ace32Wrapper.AdsGetFieldName(handle, i));
-      adsFieldDescription.setLength(Ace32Wrapper.AdsGetFieldLength(handle,adsFieldDescription.getName()));
-      adsFieldDescription.setType(Ace32Wrapper.AdsGetFieldType(handle, adsFieldDescription.getName()));
-      adsFieldDescription.setDecimals(Ace32Wrapper.AdsGetFieldDecimals(handle, adsFieldDescription.getName()));
+      adsFieldDescription.setName(ace32Wrapper.AdsGetFieldName(handle, i));
+      adsFieldDescription.setLength(ace32Wrapper.AdsGetFieldLength(handle,adsFieldDescription.getName()));
+      adsFieldDescription.setType(ace32Wrapper.AdsGetFieldType(handle, adsFieldDescription.getName()));
+      adsFieldDescription.setDecimals(ace32Wrapper.AdsGetFieldDecimals(handle, adsFieldDescription.getName()));
       adsFieldDescription.setNumber(i);
       fieldList.add(adsFieldDescription);
     }

@@ -84,16 +84,16 @@ public class Ace32 {
   /* Logical constants */
   public static final short ADS_FALSE = 0;
   public static final short ADS_TRUE = 1;
-  public static final int MSEC_PER_DAY = 24*60*60*1000;
+  public static final int MSEC_PER_DAY = 24 * 60 * 60 * 1000;
 
   /* data types */
   public static final short ADS_TYPE_UNKNOWN = 0;
   public static final short ADS_LOGICAL = 1; ///* 1 byte logical value */
   public static final short ADS_NUMERIC = 2; ///* DBF character style numeric */
   /* Date field.  With ADS_NTX, ADS_CDX, and
-       * ADS_VFP< this is an 8 byte field of the form
-      * CCYYMMDD.  With ADS_ADT, it is a 4 byte
-       * Julian date. */
+   * ADS_VFP< this is an 8 byte field of the form
+   * CCYYMMDD.  With ADS_ADT, it is a 4 byte
+   * Julian date. */
   public static final short ADS_DATE = 3;
   public static final short ADS_STRING = 4;// /* Character data */
   public static final short ADS_MEMO = 5;// /* Variable length character data */
@@ -109,13 +109,13 @@ public class Ace32 {
   /* the following are supported with the ADT format */
   public static final short ADS_SHORTINT = 12; /* IEEE 2 byte signed short integer */
   /* 4 byte long integer representing
-      * milliseconds since midnight */
+   * milliseconds since midnight */
   public static final short ADS_TIME = 13;
   /* 8 bytes.  High order 4 bytes are a
-      * long integer representing Julian date.
-      * Low order 4 bytes are a long integer
-       * representing milliseconds since
-      * midnight */
+   * long integer representing Julian date.
+   * Low order 4 bytes are a long integer
+   * representing milliseconds since
+   * midnight */
   public static final short ADS_TIMESTAMP = 14;
   public static final short ADS_AUTOINC = 15; /* 4 byte auto-increment value */
   public static final short ADS_RAW = 16; /* Untranslated data */
@@ -142,27 +142,33 @@ public class Ace32 {
   public static final short ADS_GET_FORMAT_ANSI = 0x0010;
   public static final short ADS_GET_FORMAT_WEB = 0x0030;
 
-  private Ace32Native ace32;
-  private Ace32Wrapper wrapper;
+  //private Ace32Native ace32;
+  //private Ace32Wrapper wrapper;
+  //private static volatile int isInit = 0;
+
+  static {
+    prepareLib();
+    //Ace32Native.init(getAce32LibName());
+  }
 
   public Ace32() {
-    prepareLib();
-    System.out.println(getAce32LibName());
+    //prepareLib();
+    //System.out.println(getAce32LibName());
     Ace32Native.init(getAce32LibName());
 
   }
 
-  public String test(){
-    return "Welcome";
+  public String test() {
+    return "Welcome+";
   }
 
   @SneakyThrows
-  public void prepareLib() {
-   // URL baseUrl = getClass().getResource(".");
-   // System.out.println(baseUrl);
+  public static void prepareLib() {
+    // URL baseUrl = getClass().getResource(".");
+    // System.out.println(baseUrl);
     String resourcePath = isWindowsOS() ? "/Libraries/Win/64/" : "/Libraries/Nix/64/";
-    URI uri = getClass().getResource(resourcePath).toURI();
-    System.out.println(uri);
+    URI uri = Ace32.class.getResource(resourcePath).toURI();
+    //System.out.println(uri);
 
     Path myPath;
     if (uri.getScheme().equals("jar")) {
@@ -172,10 +178,11 @@ public class Ace32 {
       myPath = Paths.get(uri);
     }
 
-  //  Path path = Paths.get(uri);
+    //  Path path = Paths.get(uri);
     List<Path> flist = getEntries(myPath);
-    flist.forEach(item -> {unPackResource(item);
-    System.out.println(item.getFileName());});
+    flist.forEach(item -> {
+      unPackResource(item);
+    });
 
   }
 
@@ -183,10 +190,10 @@ public class Ace32 {
 
   }
 
-  public List<Path> getEntries(final Path dir) throws IOException {
+  public static List<Path> getEntries(final Path dir) throws IOException {
     final List<Path> entries = new ArrayList<>();
     try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir)) {
-      for (final Iterator<Path> it = stream.iterator(); it.hasNext();) {
+      for (final Iterator<Path> it = stream.iterator(); it.hasNext(); ) {
         entries.add(it.next());
       }
     }
@@ -194,32 +201,33 @@ public class Ace32 {
   }
 
   @SneakyThrows
-  public void unPackResource(Path path) {
-    InputStream in = Files.newInputStream(path);
-    byte[] buffer = new byte[1024];
-    int read = -1;
-    //File temp = new File(SystemProperties.getProperty("io.temp"));
-    Path newFile = Paths.get(System.getProperty("java.io.tmpdir")+"/"+path.getFileName());
-    BufferedOutputStream bos = new BufferedOutputStream(Files.newOutputStream(newFile));
-    while((read = in.read(buffer)) != -1) {
-      bos.write(buffer, 0, read);
+  public static void unPackResource(Path path) {
+    try (InputStream in = Files.newInputStream(path)) {
+      byte[] buffer = new byte[1024];
+      int read = -1;
+      //File temp = new File(SystemProperties.getProperty("io.temp"));
+      Path newFile = Paths.get(System.getProperty("java.io.tmpdir") + "/" + path.getFileName());
+      try (OutputStream os = Files.newOutputStream(newFile); BufferedOutputStream bos = new BufferedOutputStream(os)) {
+        while ((read = in.read(buffer)) != -1) {
+          bos.write(buffer, 0, read);
+        }
+      }
+      //bos.close();
     }
-    bos.close();
-
     //System.load(temp.getAbsolutePath());
   }
 
-  public static boolean isWindowsOS(){
+  public static boolean isWindowsOS() {
     String os = System.getProperty("os.name").toUpperCase();
     return os.contains("WINDOWS");
   }
 
 
-  private String getAce32LibName() {
+  private static String getAce32LibName() {
     if (isWindowsOS()) {
-      return System.getProperty("java.io.tmpdir")+"/"+"ace64";
+      return System.getProperty("java.io.tmpdir") + "/" + "ace64";
     } else {
-      return System.getProperty("java.io.tmpdir")+"/"+"libace.so.11.10.0.24";
+      return System.getProperty("java.io.tmpdir") + "/" + "libace.so.11.10.0.24";
     }
   }
 

@@ -32,10 +32,12 @@ public class AdsStatement implements Closeable {
   protected AdsFieldsInfo adsFieldsInfo;
   @Setter(AccessLevel.NONE)
   protected Map<String,String> passwords;
+  protected Ace32Wrapper ace32Wrapper;
 
 
   public AdsStatement(AdsConnection adsConnection) {
     this.adsConnection = adsConnection;
+    ace32Wrapper = adsConnection.getAce32Wrapper();
     adsCharType = AdsCharType.ADS_ANSI;
     adsTableType = AdsTableType.ADS_ADT;
     adsLockType = AdsLockType.ADS_PROPRIETARY_LOCKING;
@@ -47,12 +49,12 @@ public class AdsStatement implements Closeable {
   }
 
   protected void createStatement() {
-    hStatement = Ace32Wrapper.AdsCreateSQLStatement(adsConnection.getHandle());
-    Ace32Wrapper.AdsStmtSetTableType(hStatement, adsTableType.getCode());
-    Ace32Wrapper.AdsStmtSetTableCharType(hStatement, adsCharType.getCode());
-    Ace32Wrapper.AdsStmtSetTableLockType(hStatement, adsLockType.getCode());
+    hStatement = ace32Wrapper.AdsCreateSQLStatement(adsConnection.getHandle());
+    ace32Wrapper.AdsStmtSetTableType(hStatement, adsTableType.getCode());
+    ace32Wrapper.AdsStmtSetTableCharType(hStatement, adsCharType.getCode());
+    ace32Wrapper.AdsStmtSetTableLockType(hStatement, adsLockType.getCode());
     for (String key: passwords.keySet()) {
-      Ace32Wrapper.AdsStmtSetTablePassword(hStatement, key, passwords.get(key));
+      ace32Wrapper.AdsStmtSetTablePassword(hStatement, key, passwords.get(key));
     }
 
   }
@@ -65,7 +67,7 @@ public class AdsStatement implements Closeable {
   protected void closeStatement() {
     try {
       if (hStatement != null) {
-        Ace32Wrapper.AdsCloseSQLStatement(hStatement);
+        ace32Wrapper.AdsCloseSQLStatement(hStatement);
       }
     } catch (Exception ex) {
 //        log.error(ex.getMessage());
@@ -75,7 +77,7 @@ public class AdsStatement implements Closeable {
   protected void closeCursor() {
     try {
       if (hCursor != null) {
-        Ace32Wrapper.AdsCloseTable(hCursor);
+        ace32Wrapper.AdsCloseTable(hCursor);
       }
     } catch (Exception ex) {
 //      log.error(ex.getMessage());
@@ -94,21 +96,21 @@ public class AdsStatement implements Closeable {
 
   protected void setFieldValue(String name, Object value) {
     if (value == null) {
-      Ace32Wrapper.AdsSetEmpty(hStatement, name);
+      ace32Wrapper.AdsSetEmpty(hStatement, name);
     } else if (value instanceof Time) {
-      Ace32Wrapper.AdsSetTime(hStatement, name, value.toString());
+      ace32Wrapper.AdsSetTime(hStatement, name, value.toString());
 
     } else if (value instanceof Date) {
-      Ace32Wrapper.AdsSetDate(hStatement, name, value.toString());
+      ace32Wrapper.AdsSetDate(hStatement, name, value.toString());
 
     } else if (value instanceof Boolean) {
-      Ace32Wrapper.AdsSetLogical(hStatement, name, (Boolean) value);
+      ace32Wrapper.AdsSetLogical(hStatement, name, (Boolean) value);
 
     } else if (value instanceof byte[]) {
       byte[] _arr = (byte[]) value;
-      Ace32Wrapper.AdsSetBinary(hStatement, name, Ace32.ADS_BINARY, new NativeLong(_arr.length), new NativeLong(0), _arr);
+      ace32Wrapper.AdsSetBinary(hStatement, name, Ace32.ADS_BINARY, new NativeLong(_arr.length), new NativeLong(0), _arr);
     } else {
-      Ace32Wrapper.AdsSetString(hStatement, name, value.toString());
+      ace32Wrapper.AdsSetString(hStatement, name, value.toString());
     }
   }
 
@@ -118,15 +120,15 @@ public class AdsStatement implements Closeable {
       AdsFieldDescription adsFieldDescription = adsFieldsInfo.getAdsFieldDescription(fieldName);
       if (adsFieldDescription.getType() == Ace32.ADS_NUMERIC) {
         if (adsFieldDescription.getLength() > 9 && adsFieldDescription.getDecimals() > 0) {
-          retval = Ace32Wrapper.AdsGetDouble(hCursor, fieldName);
+          retval = ace32Wrapper.AdsGetDouble(hCursor, fieldName);
         } else {
-          retval = Ace32Wrapper.AdsGetLongLong(hCursor, fieldName);
+          retval = ace32Wrapper.AdsGetLongLong(hCursor, fieldName);
         }
       } else {
         switch (adsFieldDescription.getType()) {
           case Ace32.ADS_DOUBLE:
           case Ace32.ADS_CURDOUBLE: {
-            retval = Ace32Wrapper.AdsGetDouble(hCursor, fieldName);
+            retval = ace32Wrapper.AdsGetDouble(hCursor, fieldName);
             break;
           }
           case Ace32.ADS_INTEGER:
@@ -134,46 +136,46 @@ public class AdsStatement implements Closeable {
           case Ace32.ADS_ROWVERSION:
           case Ace32.ADS_LONGLONG:
           case Ace32.ADS_AUTOINC: {
-            retval = Ace32Wrapper.AdsGetLongLong(hCursor, fieldName);
+            retval = ace32Wrapper.AdsGetLongLong(hCursor, fieldName);
             break;
           }
           case Ace32.ADS_MONEY: {
-            retval = Ace32Wrapper.AdsGetMoney(hCursor, fieldName);
+            retval = ace32Wrapper.AdsGetMoney(hCursor, fieldName);
             break;
           }
           case Ace32.ADS_MEMO: {
-            adsFieldDescription.setLength(Ace32Wrapper.AdsGetMemoLength(hCursor, fieldName));
-            retval = Ace32Wrapper.AdsGetString(hCursor, fieldName, adsFieldDescription.getLength());
+            adsFieldDescription.setLength(ace32Wrapper.AdsGetMemoLength(hCursor, fieldName));
+            retval = ace32Wrapper.AdsGetString(hCursor, fieldName, adsFieldDescription.getLength());
             break;
           }
           case Ace32.ADS_NMEMO: {
-            adsFieldDescription.setLength(Ace32Wrapper.AdsGetMemoLength(hCursor, fieldName));
-            retval = Ace32Wrapper.AdsGetStringW(hCursor, fieldName, adsFieldDescription.getLength());
+            adsFieldDescription.setLength(ace32Wrapper.AdsGetMemoLength(hCursor, fieldName));
+            retval = ace32Wrapper.AdsGetStringW(hCursor, fieldName, adsFieldDescription.getLength());
             break;
           }
           case Ace32.ADS_NCHAR:
           case Ace32.ADS_NVARCHAR: {
-            retval = Ace32Wrapper.AdsGetStringW(hCursor, fieldName, adsFieldDescription.getLength());
+            retval = ace32Wrapper.AdsGetStringW(hCursor, fieldName, adsFieldDescription.getLength());
             break;
           }
           case Ace32.ADS_STRING:
           case Ace32.ADS_VARCHAR_FOX:
           case Ace32.ADS_CISTRING: {
-            retval = Ace32Wrapper.AdsGetString(hCursor, fieldName, adsFieldDescription.getLength());
+            retval = ace32Wrapper.AdsGetString(hCursor, fieldName, adsFieldDescription.getLength());
             break;
           }
           case Ace32.ADS_DATE: {
-            retval = Ace32Wrapper.AdsGetDate(hCursor, fieldName);
+            retval = ace32Wrapper.AdsGetDate(hCursor, fieldName);
             break;
           }
           case Ace32.ADS_LOGICAL: {
-            retval = Ace32Wrapper.AdsGetLogical(hCursor, fieldName);
+            retval = ace32Wrapper.AdsGetLogical(hCursor, fieldName);
             break;
           }
           case Ace32.ADS_TIME:
           case Ace32.ADS_MODTIME:
           case Ace32.ADS_TIMESTAMP: {
-            retval = new Timestamp(Ace32Wrapper.AdsGetMilliseconds(hCursor, fieldName));
+            retval = new Timestamp(ace32Wrapper.AdsGetMilliseconds(hCursor, fieldName));
             break;
           }
           case Ace32.ADS_BINARY:
@@ -188,11 +190,11 @@ public class AdsStatement implements Closeable {
   }
 
   public boolean isEof(){
-    return Ace32Wrapper.AdsAtEOF(hCursor);
+    return ace32Wrapper.AdsAtEOF(hCursor);
   }
 
   public boolean isBof(){
-    return Ace32Wrapper.AdsAtBOF(hCursor);
+    return ace32Wrapper.AdsAtBOF(hCursor);
   }
 
   public boolean isEmpty(){
@@ -200,16 +202,16 @@ public class AdsStatement implements Closeable {
   }
 
   public void goTop(){
-    Ace32Wrapper.AdsGotoTop(hCursor);
+    ace32Wrapper.AdsGotoTop(hCursor);
   }
   public void goBottom(){
-    Ace32Wrapper.AdsGotoBottom(hCursor);
+    ace32Wrapper.AdsGotoBottom(hCursor);
   }
   public void next(){
-    Ace32Wrapper.AdsSkip(hCursor, 1);
+    ace32Wrapper.AdsSkip(hCursor, 1);
   }
   public void previous(){
-    Ace32Wrapper.AdsSkip(hCursor, -1);
+    ace32Wrapper.AdsSkip(hCursor, -1);
   }
 
   public void setPassword(String tablename, String password){
