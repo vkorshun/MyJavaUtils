@@ -1,18 +1,17 @@
 package com.wgsoftpro.ads.AdsClasses;
 
-import com.wgsoftpro.ads.Ace32Wrapper;
 
 import java.util.*;
 
 public class AdsQuery extends AdsStatement {
   private String query;
   private HashSet<String> params;
-  private HashMap hmParams;
+  private HashMap<String,Object> hmParams;
 
   public AdsQuery(AdsConnection adsConnection) {
     super(adsConnection);
-    params = new HashSet();
-    hmParams = new HashMap();
+    params = new HashSet<String>();
+    hmParams = new HashMap<String,Object>();
   }
 
   public void execute() {
@@ -37,7 +36,7 @@ public class AdsQuery extends AdsStatement {
     this.query = query;
   }
 
-  public static final String parse(String query, Set params) {
+  public static final String parse(String query, Set<String> params) {
     // I was originally using regular expressions, but they didn't work well for ignoring
     // parameter-like strings inside quotes.
 

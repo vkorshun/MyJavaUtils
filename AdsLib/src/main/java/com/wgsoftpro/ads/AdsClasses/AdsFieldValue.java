@@ -1,6 +1,5 @@
 package com.wgsoftpro.ads.AdsClasses;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.Optional;
@@ -43,7 +42,7 @@ public class AdsFieldValue {
     if (isBlank()) {
       return new Date(0);
     } else {
-      return value instanceof Date ? (Date) value : new Date(value.toString()) ;
+      return value instanceof Date ? (Date) value : new Date((Long)value) ;
     }
   }
 

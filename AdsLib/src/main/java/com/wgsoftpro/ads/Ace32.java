@@ -1,5 +1,6 @@
 package com.wgsoftpro.ads;
 
+import com.wgsoftpro.ads.ResourceExtractor.AdsResourceExtractor;
 import lombok.SneakyThrows;
 
 import java.io.*;
@@ -12,6 +13,10 @@ import java.util.List;
 
 
 public class Ace32 {
+  private static String installPath;
+  private static boolean isLibraryLoaded;
+  private static String libraryLoadErrorDescription;
+
   public static final short ADS_MAX_ERROR_LEN = 600;
   public static final short MAX_DATA_LEN = 255;
   public static final short ADS_MAX_PATH = 260;
@@ -146,10 +151,10 @@ public class Ace32 {
   //private Ace32Wrapper wrapper;
   //private static volatile int isInit = 0;
 
-  static {
-    prepareLib();
+  //static {
+  //  prepareLib();
     //Ace32Native.init(getAce32LibName());
-  }
+  //}
 
   public Ace32() {
     //prepareLib();
@@ -166,24 +171,31 @@ public class Ace32 {
   public static void prepareLib() {
     // URL baseUrl = getClass().getResource(".");
     // System.out.println(baseUrl);
+    FileSystem fileSystem = null;
     String resourcePath = isWindowsOS() ? "/Libraries/Win/64/" : "/Libraries/Nix/64/";
-    URI uri = Ace32.class.getResource(resourcePath).toURI();
-    //System.out.println(uri);
+    try {
+      URI uri = Ace32.class.getResource(resourcePath).toURI();
+      //System.out.println(uri);
 
-    Path myPath;
-    if (uri.getScheme().equals("jar")) {
-      FileSystem fileSystem = FileSystems.newFileSystem(uri, Collections.<String, Object>emptyMap());
-      myPath = fileSystem.getPath(resourcePath);
-    } else {
-      myPath = Paths.get(uri);
+      Path myPath;
+      if (uri.getScheme().equals("jar")) {
+        fileSystem = FileSystems.newFileSystem(uri, Collections.<String, Object>emptyMap());
+        myPath = fileSystem.getPath(resourcePath);
+
+      } else {
+        myPath = Paths.get(uri);
+      }
+
+      //  Path path = Paths.get(uri);
+      List<Path> flist = getEntries(myPath);
+      flist.forEach(item -> {
+        unPackResource(item);
+      });
+    } finally {
+      if (fileSystem != null) {
+        fileSystem.close();
+      }
     }
-
-    //  Path path = Paths.get(uri);
-    List<Path> flist = getEntries(myPath);
-    flist.forEach(item -> {
-      unPackResource(item);
-    });
-
   }
 
   private void getFile(Path path) {
@@ -207,11 +219,13 @@ public class Ace32 {
       int read = -1;
       //File temp = new File(SystemProperties.getProperty("io.temp"));
       Path newFile = Paths.get(System.getProperty("java.io.tmpdir") + "/" + path.getFileName());
+      //if (Files.notExists(newFile)) {
       try (OutputStream os = Files.newOutputStream(newFile); BufferedOutputStream bos = new BufferedOutputStream(os)) {
         while ((read = in.read(buffer)) != -1) {
           bos.write(buffer, 0, read);
         }
       }
+      //}
       //bos.close();
     }
     //System.load(temp.getAbsolutePath());
@@ -223,12 +237,45 @@ public class Ace32 {
   }
 
 
+  //private static String getAce32FullLibName() {
+    //if (isWindowsOS()) {
+    //  return System.getProperty("java.io.tmpdir") + "/" + "ace64";
+    //} else {
+    //  return System.getProperty("java.io.tmpdir") + "/" + "libace.so.11.10.0.24";
+    //}
+    //return installPath
+  //}
+
   private static String getAce32LibName() {
-    if (isWindowsOS()) {
-      return System.getProperty("java.io.tmpdir") + "/" + "ace64";
+    if (AdsResourceExtractor.IsWindows()) {
+      return  installPath+"/ace64";
     } else {
-      return System.getProperty("java.io.tmpdir") + "/" + "libace.so.11.10.0.24";
+      return  installPath+"libace.so.11.10.0.24";
     }
+  }
+
+  private static String getAce32ShortLibName() {
+    if (AdsResourceExtractor.IsWindows()) {
+      return  "ace64";
+    } else {
+      return  "libace.so.11.10.0.24";
+    }
+  }
+
+  static {
+    try {
+      installPath = AdsResourceExtractor.ExtractResources();
+      //if (!AdsResourceExtractor.IsWindows() && !(new EndUserLibraryUtils()).SetCurrentDirectory(installPath)) {
+      //  throw new Exception("ADS lib loading error");
+      //}
+
+      AdsResourceExtractor.LoadLibrary(getAce32ShortLibName());
+      isLibraryLoaded = true;
+    } catch (Exception ex) {
+      libraryLoadErrorDescription = ex.getMessage();
+      isLibraryLoaded = false;
+    }
+
   }
 
 }

@@ -23,11 +23,11 @@ public class AdsLibTest {
   @SneakyThrows
   public static void testPath(String resourcePath) throws URISyntaxException {
     Ace32 ace32 = new Ace32();
-    ace32.prepareLib();
-    Ace32Native.init(System.getProperty("java.io.tmpdir")+"ace64");
+    //ace32.prepareLib();
+    //Ace32Native.init(System.getProperty("java.io.tmpdir")+"ace64");
     try {
       //AceWrapper wrapper = new AceWrapper();
-      System.out.println(Ace32Wrapper.AdsGetVersion());
+      System.out.println(new Ace32Wrapper().AdsGetVersion());
     } finally {
       Ace32Native.destroy();
     }
