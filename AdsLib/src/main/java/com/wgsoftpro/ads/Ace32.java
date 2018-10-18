@@ -2,6 +2,7 @@ package com.wgsoftpro.ads;
 
 import com.wgsoftpro.ads.ResourceExtractor.AdsResourceExtractor;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
 import java.net.URI;
@@ -12,6 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 
 
+@Slf4j
 public class Ace32 {
   private static String installPath;
   private static boolean isLibraryLoaded;
@@ -250,13 +252,13 @@ public class Ace32 {
     if (AdsResourceExtractor.IsWindows()) {
       return  installPath+"/ace64";
     } else {
-      return  installPath+"libace.so.11.10.0.24";
+      return  installPath+"/libace.so.11.10.0.24";
     }
   }
 
   private static String getAce32ShortLibName() {
     if (AdsResourceExtractor.IsWindows()) {
-      return  "ace64";
+      return  "ace64.dll";
     } else {
       return  "libace.so.11.10.0.24";
     }
@@ -268,11 +270,13 @@ public class Ace32 {
       //if (!AdsResourceExtractor.IsWindows() && !(new EndUserLibraryUtils()).SetCurrentDirectory(installPath)) {
       //  throw new Exception("ADS lib loading error");
       //}
-
+      log.error(" INSTALL PATH ="+installPath);
       AdsResourceExtractor.LoadLibrary(getAce32ShortLibName());
+      log.error("loaded");
       isLibraryLoaded = true;
     } catch (Exception ex) {
       libraryLoadErrorDescription = ex.getMessage();
+      log.error("ACE32 LOAD ERROR " + libraryLoadErrorDescription);
       isLibraryLoaded = false;
     }
 

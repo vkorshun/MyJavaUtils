@@ -1,15 +1,17 @@
 package com.wgsoftpro.ads.ResourceExtractor;
 
-import java.applet.Applet;
+
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.*;
 import java.net.URL;
 import java.security.CodeSource;
-import java.security.MessageDigest;
 import java.util.*;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
+@Slf4j
 public class AdsResourceExtractor {
   private static boolean isWindows;
   private static boolean isSunOS;
@@ -392,11 +394,12 @@ public class AdsResourceExtractor {
     File dir = new File(installPath);
     if (isExtractableResources && (!dir.exists() || !CheckRequiredResources(installPath))) {
       dir.mkdir();
-
+      log.error("mkdir");
       try {
         int i;
         if (IsResourceExistsInJar(resourcesLocation + "/" + resourcesNames[0])) {
           for (i = 0; i < resourcesNames.length; ++i) {
+            log.error("WriteResources "+ resourcesLocation + "/" + resourcesNames[i]+" TO "+installPath + "/" + resourcesNames[i]);
             WriteResourceToFile(resourcesLocation + "/" + resourcesNames[i], installPath + "/" + resourcesNames[i]);
           }
         } else {
@@ -451,8 +454,9 @@ public class AdsResourceExtractor {
   }
 
   public static void LoadLibrary(String name) {
+    log.error("FIRST2 "+name);
     if (loadFromPath) {
-      String fileName = GetInstallPath() + "/" + MapLibraryName(name);
+      String fileName = GetInstallPath() + "/" + name;
       System.load(fileName);
     } else {
       System.loadLibrary(name);
@@ -461,9 +465,11 @@ public class AdsResourceExtractor {
   }
 
   static {
+
     try {
       String os_name = System.getProperty("os.name").toLowerCase();
       String os_archext = System.getProperty("os.arch").toLowerCase();
+      log.error("OS "+os_name);
       isWindows = os_name.indexOf("win") >= 0;
       isSunOS = os_name.indexOf("sunos") >= 0;
       isMacOS = os_name.indexOf("mac") >= 0;

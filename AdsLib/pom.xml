@@ -92,6 +92,12 @@
             <version>1.16.18</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.github.tomcat-slf4j-logback</groupId>
+            <artifactId>tomcat85-slf4j-logback</artifactId>
+            <version>8.5.29</version>
+        </dependency>
+
         <!-- Test -->
         <dependency>
             <groupId>junit</groupId>
