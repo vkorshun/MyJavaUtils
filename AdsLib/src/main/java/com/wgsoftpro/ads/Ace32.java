@@ -159,10 +159,12 @@ public class Ace32 {
   //}
 
   public Ace32() {
-    //prepareLib();
-    //System.out.println(getAce32LibName());
+    internalInit();
     Ace32Native.init(getAce32LibName());
+  }
 
+  public void destroy(){
+    Ace32Native.destroy();
   }
 
   public String test() {
@@ -264,16 +266,15 @@ public class Ace32 {
     }
   }
 
-  static {
+  private static synchronized void internalInit(){
     try {
-      installPath = AdsResourceExtractor.ExtractResources();
-      //if (!AdsResourceExtractor.IsWindows() && !(new EndUserLibraryUtils()).SetCurrentDirectory(installPath)) {
-      //  throw new Exception("ADS lib loading error");
-      //}
-      log.error(" INSTALL PATH ="+installPath);
-      AdsResourceExtractor.LoadLibrary(getAce32ShortLibName());
-      log.error("loaded");
-      isLibraryLoaded = true;
+      if (!isLibraryLoaded) {
+        installPath = AdsResourceExtractor.ExtractResources();
+        log.error(" INSTALL PATH =" + installPath);
+        AdsResourceExtractor.LoadLibrary(getAce32ShortLibName());
+        log.error("loaded");
+        isLibraryLoaded = true;
+      }
     } catch (Exception ex) {
       libraryLoadErrorDescription = ex.getMessage();
       log.error("ACE32 LOAD ERROR " + libraryLoadErrorDescription);
