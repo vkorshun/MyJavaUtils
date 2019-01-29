@@ -71,6 +71,23 @@ public class Ace32Wrapper {
     return handle.getValue();
   }
 
+  public String getConnectString(String serverPath, String serverTypes, String userName, String password, String  options) {
+    StringBuilder sb = new StringBuilder("");
+
+    return sb.toString();
+  }
+
+  public NativeLong AdsConnect101(String connectionString) {
+    NativeLongByReference handle = new NativeLongByReference(new NativeLong(0));
+    NativeLongByReference _nil = new NativeLongByReference(new NativeLong(0));
+    _nil.setPointer(Pointer.NULL);
+    checkError(Ace32Native.AdsConnect101(getAnsiBytes(connectionString),
+            Pointer.NULL,
+            handle));
+    return handle.getValue();
+  }
+
+
   public void AdsSetSQLTimeout(NativeLong hObj, NativeLong sqlTimeout) {
     checkError(Ace32Native.AdsSetSQLTimeout(hObj, sqlTimeout));
   }

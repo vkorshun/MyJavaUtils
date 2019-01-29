@@ -2,6 +2,7 @@ package com.wgsoftpro.ads;
 
 import com.sun.jna.NativeLong;
 import com.sun.jna.Pointer;
+import com.sun.jna.PointerType;
 import com.sun.jna.WString;
 import com.sun.jna.ptr.*;
 
@@ -24,6 +25,8 @@ public class Ace32Native {
   public static native int AdsGetLastError(IntByReference pulErrCode,
                                            byte[] pucBuf,
                                            ShortByReference pusBufLen);
+
+  public static native int AdsConnect101(byte[] connectOptions, Pointer p1, NativeLongByReference p2);
 
   public static native int AdsConnect60(
       byte[] pucServerPath,//: PAceChar;
