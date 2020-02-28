@@ -270,9 +270,9 @@ public class Ace32 {
     try {
       if (!isLibraryLoaded) {
         installPath = AdsResourceExtractor.ExtractResources();
-        log.error(" INSTALL PATH =" + installPath);
+        log.info(" INSTALL PATH =" + installPath);
         AdsResourceExtractor.LoadLibrary(getAce32ShortLibName());
-        log.error("loaded");
+        log.info("loaded");
         isLibraryLoaded = true;
       }
     } catch (Exception ex) {

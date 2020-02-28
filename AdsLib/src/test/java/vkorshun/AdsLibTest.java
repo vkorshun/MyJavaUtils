@@ -3,6 +3,7 @@ package vkorshun;
 import com.wgsoftpro.ads.Ace32;
 import com.wgsoftpro.ads.Ace32Native;
 import com.wgsoftpro.ads.Ace32Wrapper;
+import com.wgsoftpro.ads.AdsClasses.AdsConnectOptions;
 import com.wgsoftpro.ads.AdsClasses.AdsConnection;
 import com.wgsoftpro.ads.AdsClasses.AdsQuery;
 import lombok.SneakyThrows;
@@ -77,6 +78,46 @@ public class AdsLibTest {
         }
     }
 
+    @Test
+    public void adsLibTest2() throws IOException {
+        Ace32 ace32 = new Ace32();
+        //int n = getWebLicenseCount("//192.168.0.50:6262/VKFIN/COMMON/INSTALL", "adssys", "air");
+        //System.out.println(String.format(" COUNT = %d", n));
+        AdsConnectOptions adsConnectOptions = new AdsConnectOptions();
+        adsConnectOptions.setAdsCharSet(AdsConnectOptions.TADSCharSet.ADS_OEM);
+        adsConnectOptions.setAdsTableType(AdsConnectOptions.TADSTableType.ADS_DBF);
+        adsConnectOptions.setRemoteConnect(false);
+        adsConnectOptions.setLocalConnect(true);
+        adsConnectOptions.setInternetConnect(false);
+        adsConnectOptions.setDateFormat("dd.mm.yyyy");
+        adsConnectOptions.setAdsCompressionType(AdsConnectOptions.TADSCompressionType.ADS_COMPRESSION_INTERNET);
+        adsConnectOptions.setAdsCommunicationType(AdsConnectOptions.TADSCommunicationType.ADS_TCP_IP);
+
+
+        try (AdsConnection adsConn = new AdsConnection("E:/ADS_DATA/TEST/", "", "r", Ace32.ADS_LOCAL_SERVER,
+                AdsConnection.getDefaultOptions(), adsConnectOptions)) {
+            adsConn.connect();
+            if (adsConn.isConnected()) {
+                //System.out.println("connect" + adsConn.AdsGetConnectionPath());
+                try (AdsQuery _query = new AdsQuery(adsConn)) {
+                    _query.setQuery("SELECT * FROM client WHERE kodkli>10");
+                    //_query.setParam("kodkli",0);
+                    _query.execute();
+                    if (!_query.isEmpty()) {
+                    //    int usedLic = _query.getFieldValue("kol").asInteger();
+                    //    System.out.println(" LIC COUNT " + usedLic + " " + usedLic);
+                        while (!_query.isEof()) {
+                            System.out.println(_query.getFieldValue("name").asString());
+                            _query.next();
+                        }
+                    }
+                } finally{
+                }
+
+            }
+
+        }
+    }
 
 
 

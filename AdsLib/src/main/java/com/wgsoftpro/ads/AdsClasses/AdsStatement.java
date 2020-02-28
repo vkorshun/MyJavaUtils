@@ -38,8 +38,16 @@ public class AdsStatement implements Closeable {
   public AdsStatement(AdsConnection adsConnection) {
     this.adsConnection = adsConnection;
     ace32Wrapper = adsConnection.getAce32Wrapper();
-    adsCharType = AdsCharType.ADS_ANSI;
-    adsTableType = AdsTableType.ADS_ADT;
+    if (adsConnection.getAdsConnectOptions().getAdsCharSet().equals(AdsConnectOptions.TADSCharSet.ADS_OEM)) {
+      adsCharType = AdsCharType.ADS_OEM;
+    } else {
+      adsCharType = AdsCharType.ADS_ANSI;
+    }
+    if (adsConnection.getAdsConnectOptions().getAdsTableType().equals(AdsConnectOptions.TADSTableType.ADS_DBF)) {
+      adsTableType = AdsTableType.ADS_VFP;
+    } else {
+      adsTableType = AdsTableType.ADS_ADT;
+    }
     adsLockType = AdsLockType.ADS_PROPRIETARY_LOCKING;
     //createStatement();
     hStatement = null;

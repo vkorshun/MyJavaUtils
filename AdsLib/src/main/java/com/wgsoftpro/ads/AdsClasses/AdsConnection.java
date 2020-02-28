@@ -36,6 +36,19 @@ public class AdsConnection implements Closeable {
         createDefaultAdsConnectionOptions();
     }
 
+    public AdsConnection(String path, String userName, String password, short serverTypes, int options, AdsConnectOptions adsConnectOptions) {
+        ace32Wrapper = new Ace32Wrapper();
+        handle = null;
+        this.path = path;
+        this.userName = userName;
+        this.password = password;
+        this.serverTypes = serverTypes;
+        this.options = options;
+        isDictionaryConn = path.trim().endsWith(".add");
+        this.adsConnectOptions = adsConnectOptions;
+    }
+
+
     private void createDefaultAdsConnectionOptions() {
         adsConnectOptions = new AdsConnectOptions();
         adsConnectOptions.setAdsCharSet(AdsConnectOptions.TADSCharSet.ADS_ANSI);
@@ -312,7 +325,11 @@ public class AdsConnection implements Closeable {
 
       Result := Result + Format( 'TableType=%s;', [ strAliasTableType ] );
       end;*/
-        sb.append(String.format("TableType=%s;", "ADT"));
+        if (adsConnectOptions.getAdsTableType()==AdsConnectOptions.TADSTableType.ADS_DBF) {
+            sb.append(String.format("TableType=%s;", "VFP"));
+        } else {
+            sb.append(String.format("TableType=%s;", "ADT"));
+        }
 
       /*{* Add on the ExtraConnectString options *}
       if FExtraConnectString <> '' then

@@ -394,12 +394,12 @@ public class AdsResourceExtractor {
     File dir = new File(installPath);
     if (isExtractableResources && (!dir.exists() || !CheckRequiredResources(installPath))) {
       dir.mkdir();
-      log.error("mkdir");
+      log.info("mkdir");
       try {
         int i;
         if (IsResourceExistsInJar(resourcesLocation + "/" + resourcesNames[0])) {
           for (i = 0; i < resourcesNames.length; ++i) {
-            log.error("WriteResources "+ resourcesLocation + "/" + resourcesNames[i]+" TO "+installPath + "/" + resourcesNames[i]);
+            log.info("WriteResources "+ resourcesLocation + "/" + resourcesNames[i]+" TO "+installPath + "/" + resourcesNames[i]);
             WriteResourceToFile(resourcesLocation + "/" + resourcesNames[i], installPath + "/" + resourcesNames[i]);
           }
         } else {
@@ -454,7 +454,7 @@ public class AdsResourceExtractor {
   }
 
   public static void LoadLibrary(String name) {
-    log.error("FIRST2 "+name);
+    log.info("FIRST2 "+name);
     if (loadFromPath) {
       String fileName = GetInstallPath() + "/" + name;
       System.load(fileName);
@@ -469,7 +469,7 @@ public class AdsResourceExtractor {
     try {
       String os_name = System.getProperty("os.name").toLowerCase();
       String os_archext = System.getProperty("os.arch").toLowerCase();
-      log.error("OS "+os_name);
+      log.info("OS "+os_name);
       isWindows = os_name.indexOf("win") >= 0;
       isSunOS = os_name.indexOf("sunos") >= 0;
       isMacOS = os_name.indexOf("mac") >= 0;
