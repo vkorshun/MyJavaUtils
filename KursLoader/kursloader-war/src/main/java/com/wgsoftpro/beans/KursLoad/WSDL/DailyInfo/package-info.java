@@ -1,5 +1,5 @@
 /**
- * Веб сервис для получения ежедневных данных ver 31.01.2017
+ * Веб сервис для получения ежедневных данных ver 11.09.2020
  * 
  */
 @javax.xml.bind.annotation.XmlSchema(namespace = "http://web.cbr.ru/", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)

@@ -55,12 +55,12 @@ public abstract class Group
 {
 
     @XmlElementRefs({
-        @XmlElementRef(name = "any", namespace = "http://www.w3.org/2001/XMLSchema", type = Any.class, required = false),
-        @XmlElementRef(name = "all", namespace = "http://www.w3.org/2001/XMLSchema", type = JAXBElement.class, required = false),
         @XmlElementRef(name = "element", namespace = "http://www.w3.org/2001/XMLSchema", type = JAXBElement.class, required = false),
+        @XmlElementRef(name = "any", namespace = "http://www.w3.org/2001/XMLSchema", type = Any.class, required = false),
+        @XmlElementRef(name = "sequence", namespace = "http://www.w3.org/2001/XMLSchema", type = JAXBElement.class, required = false),
+        @XmlElementRef(name = "all", namespace = "http://www.w3.org/2001/XMLSchema", type = JAXBElement.class, required = false),
         @XmlElementRef(name = "group", namespace = "http://www.w3.org/2001/XMLSchema", type = JAXBElement.class, required = false),
-        @XmlElementRef(name = "choice", namespace = "http://www.w3.org/2001/XMLSchema", type = JAXBElement.class, required = false),
-        @XmlElementRef(name = "sequence", namespace = "http://www.w3.org/2001/XMLSchema", type = JAXBElement.class, required = false)
+        @XmlElementRef(name = "choice", namespace = "http://www.w3.org/2001/XMLSchema", type = JAXBElement.class, required = false)
     })
     protected List<Object> particle;
     @XmlAttribute(name = "name")
@@ -94,12 +94,12 @@ public abstract class Group
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link Any }
-     * {@link JAXBElement }{@code <}{@link All }{@code >}
      * {@link JAXBElement }{@code <}{@link LocalElement }{@code >}
+     * {@link Any }
+     * {@link JAXBElement }{@code <}{@link ExplicitGroup }{@code >}
      * {@link JAXBElement }{@code <}{@link GroupRef }{@code >}
      * {@link JAXBElement }{@code <}{@link ExplicitGroup }{@code >}
-     * {@link JAXBElement }{@code <}{@link ExplicitGroup }{@code >}
+     * {@link JAXBElement }{@code <}{@link All }{@code >}
      * 
      * 
      */

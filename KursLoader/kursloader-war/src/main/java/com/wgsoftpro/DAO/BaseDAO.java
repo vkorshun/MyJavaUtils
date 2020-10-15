@@ -51,8 +51,8 @@ public class BaseDAO {
       Class.forName("com.extendedsystems.jdbc.advantage.ADSDriver");
       dataSource.setDriverClassName("com.extendedsystems.jdbc.advantage.ADSDriver");
       dataSource.setUrl(System.getProperty("connection.url"));
-      dataSource.setUsername(System.getProperty("connection.user"));
-      dataSource.setPassword(System.getProperty("connection.password"));
+      //dataSource.setUsername(System.getProperty("connection.user"));
+      //dataSource.setPassword(System.getProperty("connection.password"));
     } catch (Exception ex) {
       LOGGER.error(ex.getMessage());
     }

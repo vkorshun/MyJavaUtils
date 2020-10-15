@@ -158,11 +158,27 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link KeyRateXMLResponse }
+     * 
+     */
+    public KeyRateXMLResponse createKeyRateXMLResponse() {
+        return new KeyRateXMLResponse();
+    }
+
+    /**
      * Create an instance of {@link Mrrf7DResponse }
      * 
      */
     public Mrrf7DResponse createMrrf7DResponse() {
         return new Mrrf7DResponse();
+    }
+
+    /**
+     * Create an instance of {@link KeyRateResponse }
+     * 
+     */
+    public KeyRateResponse createKeyRateResponse() {
+        return new KeyRateResponse();
     }
 
     /**
@@ -1078,6 +1094,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link KeyRateXML }
+     * 
+     */
+    public KeyRateXML createKeyRateXML() {
+        return new KeyRateXML();
+    }
+
+    /**
      * Create an instance of {@link OmodInfoXMLResponse.OmodInfoXMLResult }
      * 
      */
@@ -1158,6 +1182,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link KeyRate }
+     * 
+     */
+    public KeyRate createKeyRate() {
+        return new KeyRate();
+    }
+
+    /**
      * Create an instance of {@link SaldoXMLResponse.SaldoXMLResult }
      * 
      */
@@ -1203,6 +1235,14 @@ public class ObjectFactory {
      */
     public ValIntDayXML createValIntDayXML() {
         return new ValIntDayXML();
+    }
+
+    /**
+     * Create an instance of {@link KeyRateXMLResponse.KeyRateXMLResult }
+     * 
+     */
+    public KeyRateXMLResponse.KeyRateXMLResult createKeyRateXMLResponseKeyRateXMLResult() {
+        return new KeyRateXMLResponse.KeyRateXMLResult();
     }
 
     /**
@@ -1267,6 +1307,14 @@ public class ObjectFactory {
      */
     public Mrrf7D createMrrf7D() {
         return new Mrrf7D();
+    }
+
+    /**
+     * Create an instance of {@link KeyRateResponse.KeyRateResult }
+     * 
+     */
+    public KeyRateResponse.KeyRateResult createKeyRateResponseKeyRateResult() {
+        return new KeyRateResponse.KeyRateResult();
     }
 
     /**

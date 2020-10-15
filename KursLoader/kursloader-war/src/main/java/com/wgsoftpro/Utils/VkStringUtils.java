@@ -13,6 +13,11 @@ public class VkStringUtils {
     return dateFormat.format(t);
   }
 
+  public static String dateToStrSpalsh(Timestamp t){
+    SimpleDateFormat dateFormat = new SimpleDateFormat( "dd/MM/yyyy" );
+    return dateFormat.format(t);
+  }
+
   public static String dateToStrDD(Timestamp t){
     SimpleDateFormat dateFormat = new SimpleDateFormat( "yyyyMMdd" );
     return dateFormat.format(t);

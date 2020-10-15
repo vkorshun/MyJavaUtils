@@ -77,9 +77,9 @@ public abstract class Element
     protected LocalSimpleType simpleType;
     protected LocalComplexType complexType;
     @XmlElementRefs({
-        @XmlElementRef(name = "keyref", namespace = "http://www.w3.org/2001/XMLSchema", type = Keyref.class, required = false),
+        @XmlElementRef(name = "key", namespace = "http://www.w3.org/2001/XMLSchema", type = JAXBElement.class, required = false),
         @XmlElementRef(name = "unique", namespace = "http://www.w3.org/2001/XMLSchema", type = JAXBElement.class, required = false),
-        @XmlElementRef(name = "key", namespace = "http://www.w3.org/2001/XMLSchema", type = JAXBElement.class, required = false)
+        @XmlElementRef(name = "keyref", namespace = "http://www.w3.org/2001/XMLSchema", type = Keyref.class, required = false)
     })
     protected List<Object> identityConstraint;
     @XmlAttribute(name = "type")
@@ -182,8 +182,8 @@ public abstract class Element
      * <p>
      * Objects of the following type(s) are allowed in the list
      * {@link JAXBElement }{@code <}{@link Keybase }{@code >}
-     * {@link Keyref }
      * {@link JAXBElement }{@code <}{@link Keybase }{@code >}
+     * {@link Keyref }
      * 
      * 
      */

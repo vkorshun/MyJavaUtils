@@ -379,7 +379,7 @@ public interface DailyInfoSoap {
         XMLGregorianCalendar toDate);
 
     /**
-     * Получение основной информации - Ставка рефинансирования, золотовалютные резервы, денежная база, денежная масса (как XMLDocument)
+     * Получение основной информации - Ставка рефинансирования, золотовалютные резервы, денежная база, денежная масса (как XMLDocument) ver 28.05.2019
      * 
      * @return
      *     returns com.wgsoftpro.beans.KursLoad.WSDL.DailyInfo.MainInfoXMLResponse.MainInfoXMLResult
@@ -691,6 +691,42 @@ public interface DailyInfoSoap {
     @RequestWrapper(localName = "MKRXML", targetNamespace = "http://web.cbr.ru/", className = "com.wgsoftpro.beans.KursLoad.WSDL.DailyInfo.MKRXML")
     @ResponseWrapper(localName = "MKRXMLResponse", targetNamespace = "http://web.cbr.ru/", className = "com.wgsoftpro.beans.KursLoad.WSDL.DailyInfo.MKRXMLResponse")
     public com.wgsoftpro.beans.KursLoad.WSDL.DailyInfo.MKRXMLResponse.MKRXMLResult mkrxml(
+        @WebParam(name = "fromDate", targetNamespace = "http://web.cbr.ru/")
+        XMLGregorianCalendar fromDate,
+        @WebParam(name = "ToDate", targetNamespace = "http://web.cbr.ru/")
+        XMLGregorianCalendar toDate);
+
+    /**
+     * Динамика ключевой ставки  (DataSet) ver 11.09.2020
+     * 
+     * @param fromDate
+     * @param toDate
+     * @return
+     *     returns com.wgsoftpro.beans.KursLoad.WSDL.DailyInfo.KeyRateResponse.KeyRateResult
+     */
+    @WebMethod(operationName = "KeyRate", action = "http://web.cbr.ru/KeyRate")
+    @WebResult(name = "KeyRateResult", targetNamespace = "http://web.cbr.ru/")
+    @RequestWrapper(localName = "KeyRate", targetNamespace = "http://web.cbr.ru/", className = "com.wgsoftpro.beans.KursLoad.WSDL.DailyInfo.KeyRate")
+    @ResponseWrapper(localName = "KeyRateResponse", targetNamespace = "http://web.cbr.ru/", className = "com.wgsoftpro.beans.KursLoad.WSDL.DailyInfo.KeyRateResponse")
+    public com.wgsoftpro.beans.KursLoad.WSDL.DailyInfo.KeyRateResponse.KeyRateResult keyRate(
+        @WebParam(name = "fromDate", targetNamespace = "http://web.cbr.ru/")
+        XMLGregorianCalendar fromDate,
+        @WebParam(name = "ToDate", targetNamespace = "http://web.cbr.ru/")
+        XMLGregorianCalendar toDate);
+
+    /**
+     * Динамика ключевой ставки (как xmlDocument)
+     * 
+     * @param fromDate
+     * @param toDate
+     * @return
+     *     returns com.wgsoftpro.beans.KursLoad.WSDL.DailyInfo.KeyRateXMLResponse.KeyRateXMLResult
+     */
+    @WebMethod(operationName = "KeyRateXML", action = "http://web.cbr.ru/KeyRateXML")
+    @WebResult(name = "KeyRateXMLResult", targetNamespace = "http://web.cbr.ru/")
+    @RequestWrapper(localName = "KeyRateXML", targetNamespace = "http://web.cbr.ru/", className = "com.wgsoftpro.beans.KursLoad.WSDL.DailyInfo.KeyRateXML")
+    @ResponseWrapper(localName = "KeyRateXMLResponse", targetNamespace = "http://web.cbr.ru/", className = "com.wgsoftpro.beans.KursLoad.WSDL.DailyInfo.KeyRateXMLResponse")
+    public com.wgsoftpro.beans.KursLoad.WSDL.DailyInfo.KeyRateXMLResponse.KeyRateXMLResult keyRateXML(
         @WebParam(name = "fromDate", targetNamespace = "http://web.cbr.ru/")
         XMLGregorianCalendar fromDate,
         @WebParam(name = "ToDate", targetNamespace = "http://web.cbr.ru/")

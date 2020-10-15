@@ -28,4 +28,13 @@ public class TestController {
     //return baseDAO.getTest();
     return testService.test();
   }
+
+  @ApiOperation(value = "load", notes = "load", httpMethod = "GET")
+  @RequestMapping(value = "/loadNBU/{d1}/{d2}", method = RequestMethod.GET, produces = "application/json")
+  @ResponseBody
+  public String loadNBU(@PathVariable String d1, @PathVariable String d2) {
+    //BaseDAO baseDAO = new BaseDAO();
+    //return baseDAO.getTest();
+    return testService.loadNBU(d1,d2);
+  }
 }
